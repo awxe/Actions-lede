@@ -27,7 +27,7 @@ env:
 
 jobs:
   build:
-    runs-on: Ubuntu 18.04.4 LTS
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
@@ -54,8 +54,8 @@ jobs:
     - name: Upload .config
       uses: actions/upload-artifact@master
       with:
-        name: OpenWrt_config
-        path: openwrt/.config
+        name: lede_config
+        path: lede/.config
 
     - name: Download package
       id: package
@@ -72,5 +72,5 @@ jobs:
     - name: Upload bin directory
       uses: actions/upload-artifact@master
       with:
-        name: OpenWrt_bin
-        path: openwrt/bin
+        name: lede_bin
+        path: lede/bin
