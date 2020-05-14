@@ -42,7 +42,7 @@ jobs:
       run: git clone https://github.com/coolsnowwolf/lede
       
     - name: Update & Install feeds
-      run: ｜
+      run: |
         cd lede
         ./scripts/feeds update -a
         ./scripts/feeds install -a
