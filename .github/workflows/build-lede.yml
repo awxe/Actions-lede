@@ -1,9 +1,9 @@
 #=================================================
-# Description: Build OpenWrt using GitHub Actions
+# Description: Build lede using GitHub Actions
 # Lisence: MIT
 #=================================================
 
-name: Build OpenWrt
+name: Build lede
 
 on:
   repository_dispatch:
@@ -27,7 +27,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu 18 LTS x64
 
     steps:
     - name: Checkout
@@ -35,19 +35,18 @@ jobs:
 
     - name: Initialization environment
       run: |
-        sudo -E apt-get -qq update
-        sudo -E apt-get -yqq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3.5 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf
-        sudo timedatectl set-timezone "$TZ"
-        
+        sudo apt-get update
+        sudo apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3.5 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf
+             
     - name: Clone source code
-      run: git clone https://github.com/coolsnowwolf/lede openwrt
+      run: git clone https://github.com/coolsnowwolf/lede
       
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
-
-    - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
-  
+    - name: Update & Install feeds
+      run: ｜
+        cd lede
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+          
     - name: SSH connection to Actions
       uses: P3TERX/debugger-action@master
       if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
@@ -61,13 +60,13 @@ jobs:
     - name: Download package
       id: package
       run: |
-        cd openwrt
-        make download -j8 V=s
+        cd lede
+        make -j8 download V=s
         
     - name: Compile the firmware
       id: compile
       run: |
-        cd openwrt
+        cd lede
         make -j1 V=s
       
     - name: Upload bin directory
