@@ -74,3 +74,9 @@ jobs:
       with:
         name: lede_bin
         path: lede/bin
+        
+    - name: Upload firmware to WeTransfer
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer wet -s -p 16 --no-progress lede/bin 2>&1 | tee wetransfer.log
+        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
